@@ -1,0 +1,3 @@
+[submodule "fen2img"]
+	path = fen2img
+	url = git@github.com:1int/fen-to-img.git

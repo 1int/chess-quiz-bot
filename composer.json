@@ -1,0 +1,19 @@
+{
+  "name": "1int/chessquizbot",
+  "type": "project",
+  "require": {
+    "php": ">=7.2",
+    "longman/telegram-bot": "*",
+    "vlucas/phpdotenv": "^4.1",
+    "markrogoyski/simplelog-php": "0.*",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*"
+  },
+  "autoload": {
+    "psr-4": {
+        "QuizBot\\": "quizbot/",
+        "RockstarsChess\\": "quizbot/lib/RockstarsChess/"
+    }
+  }
+}
