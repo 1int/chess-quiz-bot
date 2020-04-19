@@ -1,6 +1,6 @@
-#Chess Quiz Telegram Bot
+# Chess Quiz Telegram Bot
+## About
 
-##About 
 This is a Telegram bot that provides chess puzzles. <br/>
 Extemely easy to use, especially on your phone. Check it out:
 
