@@ -52,11 +52,21 @@ class FeedbackCommand extends QuizBotCommand
         $from = $user->getFirstName() . ' ' . $user->getLastName() . ' (@' . $user->getUsername() . ')';
         $text = $this->getMessage()->getText(true);
 
-        $data = [
-            'text' => "ChessQuizBot feedback from $from\n-----------------------\n\n" . $text,
-            'chat_id' => getenv('ADMIN'),
-            'parse_mode' => 'markdown'
-        ];
+
+        if( $text ) {
+            $data = [
+                'text' => "ChessQuizBot feedback from $from\n-----------------------\n\n" . $text,
+                'chat_id' => getenv('ADMIN'),
+                'parse_mode' => 'markdown'
+            ];
+        }
+        else {
+            $data = [
+                'text' => 'Usage: /feedback <your message text>',
+                'chat_id' => $user->getId(),
+                'parse_mode' => 'markdown'
+            ];
+        }
         return Request::sendMessage($data);
     }
 }
