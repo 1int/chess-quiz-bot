@@ -3,6 +3,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Request;
 use Quizbot\QuizBotCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
@@ -59,6 +60,12 @@ class FeedbackCommand extends QuizBotCommand
                 'chat_id' => getenv('ADMIN'),
                 'parse_mode' => 'markdown'
             ];
+
+            $conversation = new Conversation($user->getId(), $this->getMessage()->getChat()->getId(), "feedback");
+            if( !$conversation->exists() ) {
+                $conversation->notes = $text;
+                $conversation->update();
+            }
         }
         else {
             $data = [
