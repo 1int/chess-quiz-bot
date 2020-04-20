@@ -48,7 +48,7 @@ class ReplyCommand extends SystemCommand
      */
     public function execute()
     {
-        $from = $this->getMessage()->getFrom();
+        $from = $this->getMessage()->getFrom()->getId();
 
         if( $from != getenv('ADMIN') && $from != getenv('SECOND_ADMIN') ) {
             return Request::emptyResponse();
