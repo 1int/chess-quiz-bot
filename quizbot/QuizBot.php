@@ -216,10 +216,15 @@ class QuizBot extends TelegramBot
      */
     public function getNewUsers()
     {
-        $users = $this->pdo->query("select CONCAT(first_name, ' @', username) as thename from user where DATE(created_at)=DATE(NOW())")->fetchAll();
+        $users = $this->pdo->query("select first_name, username from user where DATE(created_at)=DATE(NOW())")->fetchAll();
         $ret = [];
         foreach($users as $user) {
-            $ret[] = $user['thename'];
+            if ($user['username'] ) {
+                $ret[] = $user['first_name'] . ' @' . $user['username'];
+            }
+            else {
+                $ret[] = $user['first_name'];
+            }
         }
         return implode(', ', $ret);
     }

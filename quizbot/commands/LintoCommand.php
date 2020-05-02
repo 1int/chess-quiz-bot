@@ -33,7 +33,7 @@ class LintoCommand extends QuizBotCommand
     /**
      * @var string
      */
-    protected $version = '1.1.0';
+    protected $version = '1.0';
 
     /**
      * @var bool
