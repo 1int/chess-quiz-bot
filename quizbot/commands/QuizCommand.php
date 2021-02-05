@@ -66,7 +66,7 @@ class QuizCommand extends QuizBotCommand
         $conversation->notes = $puzzle->id;
         $conversation->update();
 
-        return QuizBotRequest::sendPuzzle($puzzle, $user_id, true);
+        return QuizBotRequest::sendPuzzle($puzzle, $user_id, $this->quizBot->recursion);
     }
 
     /**

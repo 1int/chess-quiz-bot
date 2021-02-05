@@ -24,7 +24,7 @@ class QuizBot extends TelegramBot
     const RANDOM_PUZZLE = 'random';
     const QUIZ_PUZZLE = 'quiz';
 
-    const EMOJI_MAP = [ 'N'=>'♞', 'Q' => '♛', 'R' => '♜', 'B' => '♝', 'P' => '♟'];
+    const EMOJI_MAP = [ 'N'=>'♞', 'Q' => '♛', 'R' => '♜', 'B' => '♝', 'P' => '♟', 'K'=>'♚'];
 
     /**
      * @var bool
@@ -178,10 +178,6 @@ class QuizBot extends TelegramBot
                 $puzzle->correct_answers += $isCorrect ? 1 : 0;
                 $puzzle->elo += (-1*$change);
                 $puzzles->updatePuzzleStats($puzzle);
-
-                //$ret .= QuizCommand::postscriptMessage();
-                QuizBotRequest::$prependText = $ret;
-                QuizBotRequest::$appendText = "\n_Hit /pause to stop_";
                 $this->recursion = true;
 
                 $data = [
@@ -191,9 +187,6 @@ class QuizBot extends TelegramBot
                 ];
 
                 Request::sendMessage($data);
-                QuizBotRequest::$prependText = ''; //TODO: drop this
-                QuizBotRequest::$appendText = '';
-
                 return $this->executeCommand(self::QUIZ_PUZZLE);
             }
         }

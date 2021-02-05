@@ -13,17 +13,14 @@ use RockstarsChess\Puzzle;
 class QuizBotRequest
 {
 
-    public static $prependText = '';
-    public static $appendText = '';
-
     /**
      * @param Puzzle $puzzle
      * @param string $chat_id
-     * @param bool $includePuzzleNumber
+     * @param bool $recursion
      * @return ServerResponse
      * @throws TelegramException
      */
-    public static function sendPuzzle(Puzzle $puzzle, $chat_id, $includePuzzleNumber = true)
+    public static function sendPuzzle(Puzzle $puzzle, $chat_id, $recursion = true)
     {
         $options = array_merge($puzzle->getOptions(), [$puzzle->getAnswer()]);
         shuffle($options);
@@ -41,12 +38,14 @@ class QuizBotRequest
             'resize_keyboard' => true
         ];
 
+
         $caption = "";
-        if( $includePuzzleNumber ) {
-            $caption = sprintf("Puzzle %s%s*%s* to move", $puzzle->id, self::$prependText? '. ' : "\n", $puzzle->isWhiteToMove() ? 'White':'Black');
+        if($recursion) {
+            $caption = sprintf("Puzzle %s. *%s* to move.", $puzzle->id, $puzzle->isWhiteToMove() ? 'White':'Black');
+            $caption .= "\n_Hit /pause to stop_";
         }
         else {
-            $caption = sprintf("*%s* to move", $puzzle->isWhiteToMove() ? 'White':'Black');
+            $caption = sprintf("Puzzle %s\n*%s* to move", $puzzle->id, $puzzle->isWhiteToMove() ? 'White':'Black');
         }
 
         $fen = $puzzle->getFen();
@@ -74,7 +73,7 @@ class QuizBotRequest
         $data = [
             'chat_id' => $chat_id,
             'photo'   => Request::encodeFile($fullPath),
-            'caption' => self::$prependText . $caption . self::$appendText,
+            'caption' => $caption,
             'parse_mode' => 'markdown'
         ];
 
