@@ -20,7 +20,7 @@
 
     $logger = new SimpleLog\Logger(__DIR__.getenv('LOG'), 'telegram_bot', getenv('LOG_LEVEL'));
     TelegramLog::initialize($logger);
-    $logger->log(LogLevel::NOTICE, 'Got a webhook call');
+    $logger->notice('Got a webhook call');
 
     try {
         $bot = new QuizBot($bot_api_key, $bot_username);
