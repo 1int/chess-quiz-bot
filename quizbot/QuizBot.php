@@ -4,6 +4,7 @@ namespace QuizBot;
 
 use Longman\TelegramBot\Commands\SystemCommands\RandomCommand;
 use Longman\TelegramBot\Conversation;
+use Longman\TelegramBot\DB;
 use Longman\TelegramBot\Entities\Message;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
@@ -59,6 +60,18 @@ class QuizBot extends TelegramBot
     {
         foreach(self::EMOJI_MAP as $key => $value) {
             $message = mb_ereg_replace($value, $key, $message);
+        }
+        return $message;
+    }
+
+    /**
+     * @param $message
+     * @return false|string
+     */
+    public function setEmojis($message)
+    {
+        foreach(self::EMOJI_MAP as $key => $value) {
+            $message = mb_ereg_replace($key, $value, $message);
         }
         return $message;
     }
@@ -154,9 +167,12 @@ class QuizBot extends TelegramBot
                 $change = $this->calculateRatingChange($quiz->elo, $puzzle->elo, $isCorrect);
                 $this->updateQuizResultsForUser($user_id, $isCorrect, $change);
 
+                $ret .= "\nCorrect answer: *". $this->setEmojis($puzzle->getAnswer()) . '*';
+
                 $newElo = $quiz->elo + $change;
 
-                $ret .= " Rating: *{$newElo}* (" . ($change > 0?'+':'') . "{$change})\n\n";
+                $ret .= "\n\n📈 *{$newElo}* (" . ($change > 0?'+':'') . "{$change})";
+                $ret .= "  🏆 " . $this->getUserPosition($newElo) . " of " .  $this->getTotalUsers();
 
                 $puzzle->wrong_answers += $isCorrect ? 0 : 1;
                 $puzzle->correct_answers += $isCorrect ? 1 : 0;
@@ -167,6 +183,17 @@ class QuizBot extends TelegramBot
                 QuizBotRequest::$prependText = $ret;
                 QuizBotRequest::$appendText = "\n_Hit /pause to stop_";
                 $this->recursion = true;
+
+                $data = [
+                    'text' => $ret,
+                    'chat_id' => $user_id,
+                    'parse_mode' => 'markdown'
+                ];
+
+                Request::sendMessage($data);
+                QuizBotRequest::$prependText = ''; //TODO: drop this
+                QuizBotRequest::$appendText = '';
+
                 return $this->executeCommand(self::QUIZ_PUZZLE);
             }
         }
@@ -289,6 +316,16 @@ class QuizBot extends TelegramBot
         $ea = 1 / (1 + pow(10, ($puzzle_rating-$player_rating)/400));
         $k = 100;
         return intval($k *(($won? 1:0) - $ea));
+    }
+
+    public function getTotalUsers()
+    {
+        return DB::getPdo()->query("select count(*) from quiz_score where 1")->fetchAll()[0][0];
+    }
+
+    public function getUserPosition($elo)
+    {
+        return intval(DB::getPdo()->query("select count(*) from quiz_score where elo > $elo")->fetchAll()[0][0]) + 1;
     }
 
 }

@@ -34,10 +34,6 @@ class StartCommand extends QuizBotCommand
      */
     protected $version = '1.1.0';
 
-    /**
-     * @var bool
-     */
-    protected $private_only = true;
 
     /**
      * Command execute method

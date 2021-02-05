@@ -66,7 +66,7 @@ class QuizCommand extends QuizBotCommand
         $conversation->notes = $puzzle->id;
         $conversation->update();
 
-        return QuizBotRequest::sendPuzzle($puzzle, $user_id, !$this->quizBot->recursion);
+        return QuizBotRequest::sendPuzzle($puzzle, $user_id, true);
     }
 
     /**
@@ -74,14 +74,6 @@ class QuizCommand extends QuizBotCommand
      */
     public static function postscriptMessage()
     {
-        /*$values = [
-            'Hit /next to continue',
-            'Click /next to proceed',
-            'Wanna go /next quiz puzzle?',
-            'Wanna try /next?',
-            'Go /next?'
-        ];*/
-
         $values = [
             'Next puzzle. Hit /pause to stop',
             'Here\'s next one. Use /pause to stop.'
