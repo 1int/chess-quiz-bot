@@ -18,7 +18,7 @@
         'database' => getenv('MYSQL_DB'),
     ];
 
-    $logger = new SimpleLog\Logger(__DIR__.getenv('LOG'), 'telegram_bot', \Psr\Log\LogLevel::NOTICE);
+    $logger = new SimpleLog\Logger(__DIR__.getenv('LOG'), 'telegram_bot', getenv('LOG_LEVEL'));
     TelegramLog::initialize($logger);
     $logger->log(LogLevel::NOTICE, 'Got a webhook call');
 
