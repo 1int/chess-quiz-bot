@@ -17,7 +17,7 @@ All custom commands are stored in `quizbot/commands`.
 
 ## Credits
 This is built on top of Longman's great PHP telegram bot framework: https://github.com/php-telegram-bot/core<br/>
-I made a custom version of tikul's fen-to-png python script to generate images: https://github.com/tikul/fen-to-pn
+I made a custom version of tikul's fen-to-png python script to generate images: https://github.com/tikul/fen-to-png
 
 Special thanks to @mmlart, @igniperch, @MESSSERR, @Kon85 and @BomberHarris_XRP for helping input the chess problems.   
 
