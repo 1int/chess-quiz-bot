@@ -41,4 +41,20 @@ abstract class QuizBotCommand extends UserCommand
             'text' => $text
         ]);
     }
+
+    /**
+     * @param string text
+     * @return ServerResponse
+     * @throws TelegramException
+     */
+    public function replyWithMarkdown($text)
+    {
+        $data = [
+            'chat_id' => $this->getMessage()->getChat()->getId(),
+            'parse_mode' => 'markdown',
+            'text' => $text
+        ];
+
+        return Request::sendMessage($data);
+    }
 }

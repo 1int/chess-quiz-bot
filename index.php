@@ -22,12 +22,22 @@
     TelegramLog::initialize($logger);
     $logger->info('Got a webhook call');
 
+
+    set_error_handler(function($errno, $message, $file, $line) use ($logger) {
+        $levels = [
+            E_ERROR => LogLevel::EMERGENCY, E_WARNING => LogLevel::WARNING, E_NOTICE => LogLevel::WARNING,
+            E_STRICT => LogLevel::WARNING
+        ];
+        $logger->log($levels[$errno], $message);
+        return true;
+    }, E_ALL);
+
     try {
         $bot = new QuizBot($bot_api_key, $bot_username);
         $bot->enableAdmins([intval(getenv('ADMIN')), intval(getenv('SECOND_ADMIN'))]);
         $bot->enableMySql($mysql_credentials);
         $bot->addCommandsPath(__DIR__ . '/quizbot/commands/');
         $bot->handle();
-    } catch (TelegramException $e) {
+    } catch (\Throwable $e) {
         $logger->log(LogLevel::EMERGENCY, $e->getMessage());
     }

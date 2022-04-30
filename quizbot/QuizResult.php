@@ -28,9 +28,4 @@ class QuizResult
         $ret->elo = 1500;
         return $ret;
     }
-
-    public function formatAsStats()
-    {
-        return sprintf("☑️ *%s*   ✖️ *%s*    🔥*%s*", $this->correct, $this->incorrect, $this->streak);
-    }
 }
