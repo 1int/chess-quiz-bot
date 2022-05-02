@@ -129,6 +129,7 @@ class QuizBot extends TelegramBot
     {
         // ✅ ❌ 🔥
         $user_id = $message->getFrom()->getId();
+        $chat_id = $message->getChat()->getId();
         $conversation = new Conversation(
             $user_id,
             $message->getChat()->getId()
@@ -156,7 +157,7 @@ class QuizBot extends TelegramBot
             if($cmd == self::RANDOM_PUZZLE ) {
                 $ret .= "\n" . RandomCommand::postscriptMessage();
                 return Request::sendMessage([
-                    'chat_id' => $user_id,
+                    'chat_id' => $chat_id,
                     'text' => $ret,
                     'parse_mode' => 'markdown'
                 ]);
@@ -182,7 +183,7 @@ class QuizBot extends TelegramBot
 
                 $data = [
                     'text' => $ret,
-                    'chat_id' => $user_id,
+                    'chat_id' => $chat_id,
                     'parse_mode' => 'markdown'
                 ];
 
@@ -192,7 +193,7 @@ class QuizBot extends TelegramBot
         }
         else {
             return Request::sendMessage([
-                'chat_id' => $user_id,
+                'chat_id' => $chat_id,
                 'text' =>  'I think I lost track of what we\'re doing. Wanna continue the /quiz or solve /random puzzle?',
             ]);
         }
@@ -249,14 +250,57 @@ class QuizBot extends TelegramBot
         return implode(', ', $ret);
     }
 
-    /**
-     * @return int
-     */
-    public function getPuzzlesForToday()
+    private function getTotalActiveUsers($days): int
+    {
+        $sql = "select COUNT(DISTINCT user_id) as cnt from conversation WHERE
+               DATEDIFF(NOW(), created_at) < $days AND user_id <> '" .  getenv('ADMIN') . "'";
+        return $this->pdo->query($sql)->fetchAll()[0]['cnt'] ?? 0;
+    }
+    
+    public function getDAU()
+    {
+        return $this->getTotalActiveUsers(1);
+    }
+
+    public function getWAU()
+    {
+        return $this->getTotalActiveUsers(7);
+    }
+
+    public function getMAU()
+    {
+        return $this->getTotalActiveUsers(30);
+    }
+
+    public function getTotalPuzzlesForToday(): int
     {
         $sql = "select count(*) as cnt from conversation WHERE user_id <> '" . getenv('ADMIN') . "' AND DATE(`created_at`) = DATE(NOW()) " .
-               " AND (`command` = 'random' OR `command`='quiz')";
+            " AND (`command` = 'random' OR `command`='quiz')";
         return $this->pdo->query($sql)->fetchAll()[0]['cnt'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getPuzzlesForTodayHTMLList()
+    {
+        $sql = "select 
+                    CONCAT(COALESCE(CONCAT(user.first_name, ' '), ''), COALESCE(user.last_name, ''), COALESCE(CONCAT(' (@', user.username, ')'), '')) as uname, 
+                    count(*) as cnt 
+                    FROM conversation LEFT join user on conversation.user_id = user.id 
+                    WHERE user_id <> " . getenv('ADMIN') .  " AND DATE(conversation.`created_at`) = DATE(NOW())
+                    AND (`command` = 'random' OR `command`='quiz') GROUP BY user_id
+                    ORDER BY cnt DESC";
+
+        $rows = $this->pdo->query($sql)->fetchAll();
+        if($rows) {
+            $ret = '';
+            foreach($rows as $row) {
+                $ret .= '<b>' . $row['cnt'] .  '</b> ' . $row['uname'] . "\n";
+            }
+            return $ret;
+        }
+        return '';
     }
 
     public function getQuizForUser($user_id)

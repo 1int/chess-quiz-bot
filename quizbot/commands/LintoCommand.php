@@ -56,12 +56,18 @@ class LintoCommand extends QuizBotCommand
         }
         else {
             $data = [
-                'text' => sprintf( "<b>Admin Stats</b>\n--------------\nAvg Win Percentage: <b>%s</b>\n\n" .
-                                    "New Players: %s\n\n" .
-                                    "Puzzles Solved Today: <b>%s</b>\n",
+                'text' => sprintf( "<b>Admin Stats</b>\n--------------\n" .
+                                    "DAU <b>%d</b> WAU <b>%d</b> MAU <b>%d</b>\n" .
+                                     "Avg Win Percentage: <b>%s</b>\n\n" .
+                                    "New Players: <b>%s</b>\n\n" .
+                                    "Puzzles Solved Today [<b>%d</b>]\n%s",
+                    $this->quizBot->getDAU(),
+                    $this->quizBot->getWAU(),
+                    $this->quizBot->getMAU(),
                     $this->quizBot->getWinPercentage(),
                     $this->quizBot->getNewUsers(),
-                    $this->quizBot->getPuzzlesForToday()
+                    $this->quizBot->getTotalPuzzlesForToday(),
+                    $this->quizBot->getPuzzlesForTodayHTMLList()
                 ),
                 'chat_id' => $chat_id,
                 'parse_mode' => 'html'
