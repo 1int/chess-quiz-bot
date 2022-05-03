@@ -9,10 +9,10 @@ Available here: https://t.me/ChessQuizBot
 ![demo](resources/demo.jpg)
 
 ## Supported commands
-Current verison supports two main user commands:
+Current verison has these main commands:
 - /random to get a random puzzle (no rating)
 - /quiz to get the next puzzle (affects rating)
-- /top to see current top players
+- /top to see current top-rated players
 
 There's also /help and /feedback commands and a few admin tools and stats.
 All custom commands are stored in `quizbot/commands`. 
