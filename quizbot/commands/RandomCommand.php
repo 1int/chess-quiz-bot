@@ -42,7 +42,7 @@ class RandomCommand extends QuizBotCommand
     /**
      * @var bool
      */
-    protected $private_only = true;
+    protected $private_only = false;
 
     /**
      * Command execute method

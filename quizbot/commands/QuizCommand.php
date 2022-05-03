@@ -43,7 +43,7 @@ class QuizCommand extends QuizBotCommand
     /**
      * @var bool
      */
-    protected $private_only = true;
+    protected $private_only = false;
 
     /**
      * Command execute method
@@ -54,6 +54,7 @@ class QuizCommand extends QuizBotCommand
     public function execute()
     {
         $user_id = $this->getMessage()->getFrom()->getId();
+        $chat_id = $this->getMessage()->getChat()->getId();
         $quiz = $this->quizBot->getQuizForUser($user_id);
 
         if( intval($quiz->next) > intval(getenv('QUIZ_PUZZLES')) ) {
@@ -62,11 +63,11 @@ class QuizCommand extends QuizBotCommand
 
         $puzzle = (new PuzzleRepository())->getById($quiz->next);
 
-        $conversation = new Conversation($user_id, $user_id, QuizBot::QUIZ_PUZZLE);
+        $conversation = new Conversation($user_id, $chat_id, QuizBot::QUIZ_PUZZLE);
         $conversation->notes = $puzzle->id;
         $conversation->update();
 
-        return QuizBotRequest::sendPuzzle($puzzle, $user_id, $this->quizBot->recursion);
+        return QuizBotRequest::sendPuzzle($puzzle, $chat_id, $this->quizBot->recursion);
     }
 
     /**
