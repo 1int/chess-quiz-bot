@@ -32,7 +32,7 @@ class PuzzleCommand extends QuizBotCommand
             if($this->getMessage()->getChat()->isPrivateChat()) {
                 return Request::sendMessage([
                     'chat_id' => $chat_id,
-                    'text' => "This command is reserved for chats and groups.\nUse /quiz to play alone."
+                    'text' => "This command is reserved for channels and groups.\nUse /quiz to play alone."
                 ]);
             }
         }
