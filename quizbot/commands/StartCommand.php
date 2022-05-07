@@ -43,11 +43,12 @@ class StartCommand extends QuizBotCommand
      */
     public function execute()
     {
-        $text    = 'Hi there! ' . PHP_EOL .
+        $text    = 'Hi there! ' . PHP_EOL . PHP_EOL .
             '- hit /quiz to start a challenge' . PHP_EOL .
             '- /random for one puzzle' . PHP_EOL .
-            '- /help for full command list.';
-            //'- /daily to get new puzzle every day, or /help for full command list.';
+            PHP_EOL .
+            '👥💬 This bot can be used in channels and groups.' . PHP_EOL .
+            'Use /puzzle command in a chat or a group to play with friends.';
 
         return $this->replyWithText($text);
     }
