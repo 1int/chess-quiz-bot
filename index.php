@@ -2,7 +2,6 @@
 
     require __DIR__ . '/vendor/autoload.php';
 
-    use Longman\TelegramBot\Exception\TelegramException;
     use Longman\TelegramBot\TelegramLog;
     use Psr\Log\LogLevel;
     use QuizBot\QuizBot;

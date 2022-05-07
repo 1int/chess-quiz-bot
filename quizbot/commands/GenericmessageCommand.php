@@ -54,13 +54,24 @@ class GenericmessageCommand extends QuizBotCommand
         if( $this->quizBot->isChessMove($message) ) {
             return $this->quizBot->checkAnswer($this->getMessage());
         }
+        elseif(($chat = $this->getMessage()->getChat()) && $chat->isGroupChat()){
+            $users = $this->getMessage()->getNewChatMembers();
+            foreach($users as $user) {
+               if($user->getUsername() === getenv('BOTNAME')) {
+                   return Request::sendMessage([
+                       'chat_id' => $chat_id,
+                       'text' => "Hey! I am Chess Quiz Bot. Happy to be in your group!\nUse /puzzle to get a chess puzzle from me."
+                   ]);
+               }
+            }
+            return Request::emptyResponse();
+        }
         else {
-            $data = [
+            return  Request::sendMessage([
                 'chat_id' => $chat_id,
                 'text' => 'I don\'t really understand human language.' . "\n" . 'Wanna do a /quiz or a /random puzzle?',
                 'reply_markup' => json_encode(['remove_keyboard' => true]),
-            ];
+            ]);
         }
-        return Request::sendMessage($data);
     }
 }

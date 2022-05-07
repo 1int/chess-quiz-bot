@@ -43,7 +43,7 @@ class QuizCommand extends QuizBotCommand
     /**
      * @var bool
      */
-    protected $private_only = false;
+    protected $private_only = true;
 
     /**
      * Command execute method

@@ -3,7 +3,6 @@
 
 namespace QuizBot;
 
-
 use Longman\TelegramBot\Entities\KeyboardButton;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
@@ -12,7 +11,6 @@ use RockstarsChess\Puzzle;
 
 class QuizBotRequest
 {
-
     /**
      * @param Puzzle $puzzle
      * @param string $chat_id
@@ -22,15 +20,13 @@ class QuizBotRequest
      */
     public static function sendPuzzle(Puzzle $puzzle, $chat_id, $recursion = true)
     {
-        $options = array_merge($puzzle->getOptions(), [$puzzle->getAnswer()]);
-        shuffle($options);
+        list($options, $_) = QuizBot::generateOptions($puzzle);
 
-        foreach($options as &$item) {
-            $item = QuizBot::toHumanReadableAnswer($item);
-        }
-
-        $o = $options;
-        $keyboard = [[new KeyboardButton($o[0]), new KeyboardButton($o[1])], [new KeyboardButton($o[2]), new KeyboardButton($o[3])]];
+        // 2x2 keyboard
+        $keyboard = [
+            [new KeyboardButton($options[0]), new KeyboardButton($options[1])],
+            [new KeyboardButton($options[2]), new KeyboardButton($options[3])]
+        ];
 
         $keyboard_config = [
             'keyboard' => $keyboard,
@@ -38,8 +34,6 @@ class QuizBotRequest
             'resize_keyboard' => true
         ];
 
-
-        $caption = "";
         if($recursion) {
             $caption = sprintf("Puzzle %s. *%s* to move.", $puzzle->id, $puzzle->isWhiteToMove() ? 'White':'Black');
             $caption .= "\n_Hit /pause to stop_";
@@ -82,5 +76,21 @@ class QuizBotRequest
         }
 
         return Request::sendPhoto($data);
+    }
+
+    public static function sendPoll(Puzzle $puzzle, $chat_id, $isAnonymous)
+    {
+        self::sendFen($puzzle->getFen(), $chat_id);
+
+        list($options, $correct_option) = QuizBot::generateOptions($puzzle);
+
+        return Request::sendPoll([
+            'chat_id' => $chat_id,
+            'question' => sprintf("Puzzle %s. %s to move.", $puzzle->id, $puzzle->isWhiteToMove() ? 'White':'Black'),
+            'type' => 'quiz',
+            'options' => json_encode($options),
+            'correct_option_id' => $correct_option,
+            'is_anonymous' => $isAnonymous
+        ]);
     }
 }

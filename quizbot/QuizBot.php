@@ -11,6 +11,7 @@ use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram as TelegramBot;
 use Longman\TelegramBot\Exception\TelegramException;
 use RockstarsChess\PuzzleRepository;
+use RockstarsChess\Puzzle;
 
 /**
  * Class QuizBot
@@ -100,6 +101,24 @@ class QuizBot extends TelegramBot
         else { // pawn move
             return /*'♟' . */ $a;
         }
+    }
+
+    /**
+     * Generates options to show.
+     * Returns: [[option1, option2, option3, option4], correct_option_index]
+     *
+     * @param Puzzle $puzzle
+     * @return array
+     */
+    public static function generateOptions(Puzzle $puzzle): array
+    {
+        $options = array_map(function($o) {
+            return self::toHumanReadableAnswer($o);
+        }, array_merge($puzzle->getOptions(), [$puzzle->getAnswer()]));
+
+        $correct_option_index = array_search(QuizBot::toHumanReadableAnswer($puzzle->getAnswer()), $options);
+
+        return [$options, $correct_option_index];
     }
 
     public function getCorrectText()
