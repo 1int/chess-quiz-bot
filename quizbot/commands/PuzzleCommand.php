@@ -2,16 +2,11 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use Longman\TelegramBot\Conversation;
-use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Entities\ServerResponse;
-
-use Longman\TelegramBot\TelegramLog;
-use QuizBot\QuizBot;
 use QuizBot\QuizBotCommand;
 use QuizBot\QuizBotRequest;
 use RockstarsChess\PuzzleRepository;
+use Longman\TelegramBot\Request;
 
 
 /**
@@ -34,6 +29,12 @@ class PuzzleCommand extends QuizBotCommand
         if(!$chat_id) {
             $chat_id = $this->getMessage()->getChat()->getId();
             $isChannel = false;
+            if($this->getMessage()->getChat()->isPrivateChat()) {
+                return Request::sendMessage([
+                    'chat_id' => $chat_id,
+                    'text' => "This command is reserved for chats and groups.\nUse /quiz to play alone."
+                ]);
+            }
         }
         else {
             $isChannel = true;

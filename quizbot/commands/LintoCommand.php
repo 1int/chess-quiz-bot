@@ -2,7 +2,6 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
 use Quizbot\QuizBotCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
