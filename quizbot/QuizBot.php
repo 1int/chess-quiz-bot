@@ -385,4 +385,16 @@ class QuizBot extends TelegramBot
         return intval(DB::getPdo()->query("select count(*) from quiz_score where elo > $elo")->fetchAll()[0][0]) + 1;
     }
 
+    public function getTotalPollsToday(): int
+    {
+        return intval(DB::getPdo()->query("select count(*) from poll where id > 5458391687862681834 AND DATE(created_at) = DATE(now())")->fetchAll()[0][0]);
+    }
+
+    public function getTotalPollAnswersToday(): int
+    {
+        $admin = getenv('ADMIN');
+        return intval(DB::getPdo()->query("select count(*) from poll_answer where DATE(created_at) = DATE(now()) AND user_id != $admin")->fetchAll()[0][0]);
+    }
+
+
 }

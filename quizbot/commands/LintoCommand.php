@@ -3,7 +3,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Request;
-use Quizbot\QuizBotCommand;
+use QuizBot\QuizBotCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 
@@ -45,10 +45,11 @@ class LintoCommand extends QuizBotCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute()
+    public function execute($chat_id = null)
     {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
+        if(!$chat_id) {
+            $chat_id = $this->getMessage()->getChat()->getId();
+        }
 
         if( $chat_id != getenv('ADMIN') && $chat_id != getenv('SECOND_ADMIN') ) {
             return Request::emptyResponse();
@@ -59,12 +60,15 @@ class LintoCommand extends QuizBotCommand
                                     "DAU <b>%d</b> WAU <b>%d</b> MAU <b>%d</b>\n" .
                                      "Avg Win Percentage: <b>%s</b>\n\n" .
                                     "New Players: <b>%s</b>\n\n" .
+                                    "Polls created/answered today: <b>%d</b> / <b>%d</b>\n\n".
                                     "Puzzles Solved Today [<b>%d</b>]\n%s",
                     $this->quizBot->getDAU(),
                     $this->quizBot->getWAU(),
                     $this->quizBot->getMAU(),
                     $this->quizBot->getWinPercentage(),
                     $this->quizBot->getNewUsers(),
+                    $this->quizBot->getTotalPollsToday(),
+                    $this->quizBot->getTotalPollAnswersToday(),
                     $this->quizBot->getTotalPuzzlesForToday(),
                     $this->quizBot->getPuzzlesForTodayHTMLList()
                 ),

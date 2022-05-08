@@ -5,10 +5,10 @@
     use Longman\TelegramBot\TelegramLog;
     use Psr\Log\LogLevel;
     use QuizBot\QuizBot;
+    use Longman\TelegramBot\Commands\SystemCommands\LintoCommand;
+
 
     Dotenv\Dotenv::createImmutable(__DIR__)->load();
-    $bot_api_key  = getenv('TOKEN');
-    $bot_username = getenv('BOTNAME');
 
     $mysql_credentials = [
         'host'     => getenv('MYSQL_HOST'),
@@ -21,22 +21,33 @@
     TelegramLog::initialize($logger);
     $logger->info('Got a webhook call');
 
-
     set_error_handler(function($errno, $message, $file, $line) use ($logger) {
         $levels = [
             E_ERROR => LogLevel::EMERGENCY, E_WARNING => LogLevel::WARNING, E_NOTICE => LogLevel::WARNING,
             E_STRICT => LogLevel::WARNING
         ];
-        $logger->log($levels[$errno], $message);
+        $logger->log($levels[$errno], '(' . $file . ':' . $line . ') ' . $message);
         return true;
     }, E_ALL);
 
-    try {
-        $bot = new QuizBot($bot_api_key, $bot_username);
+
+
+
+
+   try {
+        $bot = new QuizBot( getenv('TOKEN'), getenv('BOTNAME'));
         $bot->enableAdmins([intval(getenv('ADMIN')), intval(getenv('SECOND_ADMIN'))]);
         $bot->enableMySql($mysql_credentials);
         $bot->addCommandsPath(__DIR__ . '/quizbot/commands/');
-        $bot->handle();
+
+       if(php_sapi_name() === 'cli' && $argv[1] === 'stats') {
+           require "./quizbot/commands/LintoCommand.php";
+           $lintoCommand = new LintoCommand($bot);
+           $lintoCommand->execute(getenv('ADMIN'));
+           die;
+       }
+
+       $bot->handle();
     } catch (\Throwable $e) {
-        $logger->log(LogLevel::EMERGENCY, $e->getMessage());
+        $logger->log(LogLevel::EMERGENCY, '(' . $e->getFile() . ':' . $e->getLine() . ') ' . $e->getMessage());
     }
