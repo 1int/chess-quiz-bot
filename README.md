@@ -6,7 +6,13 @@ This is a open source Telegram bot that provides chess puzzles. <br/>
 Available here: https://t.me/ChessQuizBot
 
 
+Here's how `/random` command looks like in my private chat:
 ![demo](resources/demo.jpg)
+
+Here's how `/puzzle` command looks like in a group chat. It produces a poll so that amny people can answer.
+![demo](resources/demo2.jpg)
+
+
 
 ## Supported commands
 Current verison has these main commands:
