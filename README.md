@@ -19,6 +19,7 @@ Current verison has these main commands:
 - /random to get a random puzzle (no rating)
 - /quiz to get the next puzzle (affects rating)
 - /top to see current top-rated players
+- /puzzle to send puzzles to channels and group chats
 
 There's also /help and /feedback commands and a few admin tools and stats.
 All custom commands are stored in `quizbot/commands`. 
