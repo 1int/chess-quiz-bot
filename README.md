@@ -9,7 +9,7 @@ Available here: https://t.me/ChessQuizBot
 Here's how `/random` command looks like in my private chat:<br/>
 ![demo](resources/demo.jpg)
 
-Here's how `/puzzle` command looks like in a group chat. It produces a poll so that amny people can answer.<br/>
+Here's how `/puzzle` command looks like in a group chat. It produces a poll so that many people can answer:<br/><br/>
 ![demo](resources/demo2.jpg)
 
 
