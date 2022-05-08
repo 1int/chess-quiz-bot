@@ -67,6 +67,14 @@ class QuizCommand extends QuizBotCommand
         $conversation->notes = $puzzle->id;
         $conversation->update();
 
+        // 10% chance to trigger /top command when playing on rating
+        if($this->quizBot->recursion) {
+            if(rand(1, 100) >= 85) {
+                $topCommand = new TopCommand($this->telegram);
+                $topCommand->execute($chat_id);
+            }
+        }
+
         return QuizBotRequest::sendPuzzle($puzzle, $chat_id, $this->quizBot->recursion);
     }
 

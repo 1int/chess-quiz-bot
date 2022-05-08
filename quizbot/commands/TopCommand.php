@@ -42,16 +42,14 @@ class TopCommand extends QuizBotCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute()
+    public function execute($chat_id = null)
     {
         $repo = new PlayerRepository();
         $players = $repo->top(self::LIMIT);
 
-
-
         $header = sprintf("*Top %d players* 🏆\n\n", self::LIMIT);
         $playersText = '';
-        $place = 1;
+
         foreach($players as $player) {
             $q = '';
             $hasNickname = isset($player['username']) && $player['username'] && strpos($player['username'], '_') === false;
@@ -63,6 +61,6 @@ class TopCommand extends QuizBotCommand
             $playersText .= '*' . $player['elo'] . '*' . ' ' . $emo . $firstName . $lastName . $nickname . ' ' . "\n";
         }
 
-        return $this->replyWithMarkdown($header . $playersText);
+        return $this->replyWithMarkdown($header . $playersText, $chat_id);
     }
 }

@@ -47,10 +47,14 @@ abstract class QuizBotCommand extends UserCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function replyWithMarkdown($text)
+    public function replyWithMarkdown($text, $chat_id = null)
     {
+        if(!$chat_id) {
+            $chat_id = $this->getMessage()->getChat()->getId();
+        }
+
         $data = [
-            'chat_id' => $this->getMessage()->getChat()->getId(),
+            'chat_id' => $chat_id,
             'parse_mode' => 'markdown',
             'text' => $text
         ];
