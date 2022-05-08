@@ -116,6 +116,7 @@ class QuizBot extends TelegramBot
             return self::toHumanReadableAnswer($o);
         }, array_merge($puzzle->getOptions(), [$puzzle->getAnswer()]));
 
+        shuffle($options);
         $correct_option_index = array_search(QuizBot::toHumanReadableAnswer($puzzle->getAnswer()), $options);
 
         return [$options, $correct_option_index];
