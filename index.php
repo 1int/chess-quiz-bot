@@ -5,8 +5,7 @@
     use Longman\TelegramBot\TelegramLog;
     use Psr\Log\LogLevel;
     use QuizBot\QuizBot;
-    use Longman\TelegramBot\Commands\SystemCommands\LintoCommand;
-
+    use QuizBot\Commands\LintoCommand;
 
     Dotenv\Dotenv::createImmutable(__DIR__)->load();
 
@@ -39,15 +38,8 @@
         $bot->enableAdmins([intval(getenv('ADMIN')), intval(getenv('SECOND_ADMIN'))]);
         $bot->enableMySql($mysql_credentials);
         $bot->addCommandsPath(__DIR__ . '/quizbot/commands/');
-        try {
-            $list = $bot->getCommandsList();
-        }
-        catch(\Throwable $e) {
-
-        }
 
        if(php_sapi_name() === 'cli' && $argv[1] === 'stats') {
-           require __DIR__ . "/quizbot/commands/LintoCommand.php";
            $lintoCommand = new LintoCommand($bot);
            $lintoCommand->setChatId(getenv('ADMIN'))->execute();
            die;

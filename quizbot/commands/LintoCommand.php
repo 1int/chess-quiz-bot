@@ -46,12 +46,23 @@ class LintoCommand extends QuizBotCommand
      */
     public function execute(): ServerResponse
     {
+        // Send this only on cron once a day, otherwise I go crazy checking this every 5 minutes
+        if(php_sapi_name() !== 'cli') {
+            return Request::emptyResponse();
+        }
+
         $chat_id = $this->getChatId();
 
         if( $chat_id != getenv('ADMIN') && $chat_id != getenv('SECOND_ADMIN') ) {
             return Request::emptyResponse();
         }
         else {
+
+            Request::sendMessage([
+                'text' => 'Evening stats for you, my lord',
+                'chat_id' => $chat_id
+            ]);
+
             $data = [
                 'text' => sprintf( "<b>Admin Stats</b>\n--------------\n" .
                                     "DAU <b>%d</b> WAU <b>%d</b> MAU <b>%d</b>\n" .
