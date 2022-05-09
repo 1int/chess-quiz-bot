@@ -8,9 +8,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
-use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Request;
 use QuizBot\QuizBotCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
@@ -46,10 +45,10 @@ class GenericmessageCommand extends QuizBotCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute()
+    public function execute(): ServerResponse
     {
         $message = $this->getMessage()->getText();
-        $chat_id = $this->getMessage()->getChat()->getId();
+        $chat_id = $this->getChatId();
 
         if( $this->quizBot->isChessMove($message) ) {
             return $this->quizBot->checkAnswer($this->getMessage());

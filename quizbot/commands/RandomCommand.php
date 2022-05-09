@@ -1,21 +1,23 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Entities\ServerResponse;
 
+use MongoDB\Driver\Server;
 use QuizBot\QuizBot;
 use QuizBot\QuizBotCommand;
 use QuizBot\QuizBotRequest;
 use RockstarsChess\PuzzleRepository;
 
 /**
- * Start command
+ * Random Command
  *
- * Gets executed when a user first starts using the bot.
+ * Sends a random puzzle.
+ * Doesn not affect elo rating.
  */
 class RandomCommand extends QuizBotCommand
 {
@@ -50,7 +52,7 @@ class RandomCommand extends QuizBotCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute()
+    public function execute(): ServerResponse
     {
         $chat_id = $this->getMessage()->getChat()->getId();
         $user_id = $this->getMessage()->getFrom()->getId();

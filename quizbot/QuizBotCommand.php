@@ -21,10 +21,30 @@ abstract class QuizBotCommand extends UserCommand
     /** @var QuizBot */
     public $quizBot;
 
+    /** @var int|null predefined chat it to reply to */
+    protected $chat_id = null;
+
     public function __construct(Telegram $telegram, Update $update = null)
     {
         parent::__construct($telegram, $update);
         $this->quizBot = $telegram;
+    }
+
+    public function setChatId($chat_id): QuizBotCommand
+    {
+        $this->chat_id = $chat_id;
+        return $this;
+    }
+
+    public function getChatId(): int
+    {
+        if(is_null($this->chat_id)) {
+            $msg = $this->getMessage() ? $this->getMessage() : $this->getChannelPost();
+            return $msg->getChat()->getId();
+        }
+        else {
+            return $this->chat_id;
+        }
     }
 
     /**
@@ -37,7 +57,7 @@ abstract class QuizBotCommand extends UserCommand
     public function replyWithText($text)
     {
         return Request::sendMessage([
-            'chat_id' => $this->getMessage()->getChat()->getId(),
+            'chat_id' => $this->getChatId(),
             'text' => $text
         ]);
     }
@@ -47,11 +67,9 @@ abstract class QuizBotCommand extends UserCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function replyWithMarkdown($text, $chat_id = null)
+    public function replyWithMarkdown($text)
     {
-        if(!$chat_id) {
-            $chat_id = $this->getMessage()->getChat()->getId();
-        }
+       $chat_id = $this->getChatId();
 
         $data = [
             'chat_id' => $chat_id,

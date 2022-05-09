@@ -13,6 +13,7 @@
   "autoload": {
     "psr-4": {
         "QuizBot\\": "quizbot/",
+        "QuizBot\\Commands\\": "quizbot/commands/",
         "RockstarsChess\\": "quizbot/lib/RockstarsChess/"
     }
   }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
 use Longman\TelegramBot\Request;
 use QuizBot\QuizBotCommand;
@@ -8,9 +8,8 @@ use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 
 /**
- * Start command
- *
- * Gets executed when a user first starts using the bot.
+ * Admin command
+ * Sends out some stats to the admin
  */
 class LintoCommand extends QuizBotCommand
 {
@@ -45,11 +44,9 @@ class LintoCommand extends QuizBotCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute($chat_id = null)
+    public function execute(): ServerResponse
     {
-        if(!$chat_id) {
-            $chat_id = $this->getMessage()->getChat()->getId();
-        }
+        $chat_id = $this->getChatId();
 
         if( $chat_id != getenv('ADMIN') && $chat_id != getenv('SECOND_ADMIN') ) {
             return Request::emptyResponse();

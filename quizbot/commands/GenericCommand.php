@@ -9,12 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
-use Longman\TelegramBot\Entities\WebhookInfo;
+use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
-use Longman\TelegramBot\TelegramLog;
 
 /**
  * Generic command
@@ -36,7 +35,7 @@ class GenericCommand extends SystemCommand
      */
     protected $version = '1.1.0';
 
-    public function execute()
+    public function execute(): ServerResponse
     {
         if(($msg = $this->getChannelPost()) && $msg->getCommand() === 'puzzle') {
             $chat_id = $msg->getChat()->getId();
@@ -45,7 +44,7 @@ class GenericCommand extends SystemCommand
                 'message_id' => $msg->getMessageId()
             ]);
 
-            (new PuzzleCommand($this->telegram))->execute($chat_id);
+            (new PuzzleCommand($this->telegram))->setChatId($chat_id)->execute();
             return Request::emptyResponse();
         }
         else {

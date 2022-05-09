@@ -1,6 +1,6 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
 use Longman\TelegramBot\Entities\ServerResponse;
 use QuizBot\QuizBotCommand;
@@ -10,9 +10,11 @@ use Longman\TelegramBot\Request;
 
 
 /**
+* Puzzle Command.
 * This one is for groups and channels.
- * Creats a poll.
- */
+* Creats a poll instead of setting user keyboard.
+*
+*/
 class PuzzleCommand extends QuizBotCommand
 {
     protected $name = 'puzzle';
@@ -24,9 +26,9 @@ class PuzzleCommand extends QuizBotCommand
     /**
      * @return ServerResponse
      */
-    public function execute($chat_id = null)
+    public function execute(): ServerResponse
     {
-        if(!$chat_id) {
+        if(is_null($this->chat_id)) {
             $chat_id = $this->getMessage()->getChat()->getId();
             $isChannel = false;
             if($this->getMessage()->getChat()->isPrivateChat()) {
@@ -40,6 +42,6 @@ class PuzzleCommand extends QuizBotCommand
             $isChannel = true;
         }
         $puzzle = (new PuzzleRepository())->random();
-        return QuizBotRequest::sendPoll($puzzle, $chat_id, $isChannel);
+        return QuizBotRequest::sendPoll($puzzle, $this->chat_id, $isChannel);
     }
 }

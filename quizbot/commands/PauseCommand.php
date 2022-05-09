@@ -1,6 +1,6 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Conversation;
@@ -10,9 +10,9 @@ use Longman\TelegramBot\Request;
 use QuizBot\QuizBot;
 
 /**
- * Start command
- *
- * Gets executed when a user first starts using the bot.
+ * Pause command
+ * Pauses the quiz.
+ * Doesn't do anything if you're not quizzing currently.
  */
 class PauseCommand extends SystemCommand
 {
@@ -47,7 +47,7 @@ class PauseCommand extends SystemCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute()
+    public function execute(): ServerResponse
     {
         $data = [
             'chat_id' => $this->getMessage()->getChat()->getId(),

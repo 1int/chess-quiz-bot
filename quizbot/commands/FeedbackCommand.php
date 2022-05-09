@@ -1,6 +1,6 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Conversation;
@@ -10,9 +10,9 @@ use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 
 /**
- * Start command
+ * Feedback Command
  *
- * Gets executed when a user first starts using the bot.
+ * Sends feedback from users to the admin
  */
 class FeedbackCommand extends QuizBotCommand
 {
@@ -47,7 +47,7 @@ class FeedbackCommand extends QuizBotCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute()
+    public function execute(): ServerResponse
     {
         $user = $this->getMessage()->getFrom();
         $from = $user->getFirstName() . ' ' . $user->getLastName() . ' (@' . $user->getUsername() . ')';

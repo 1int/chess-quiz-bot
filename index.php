@@ -39,11 +39,17 @@
         $bot->enableAdmins([intval(getenv('ADMIN')), intval(getenv('SECOND_ADMIN'))]);
         $bot->enableMySql($mysql_credentials);
         $bot->addCommandsPath(__DIR__ . '/quizbot/commands/');
+        try {
+            $list = $bot->getCommandsList();
+        }
+        catch(\Throwable $e) {
+
+        }
 
        if(php_sapi_name() === 'cli' && $argv[1] === 'stats') {
-           require "./quizbot/commands/LintoCommand.php";
+           require __DIR__ . "/quizbot/commands/LintoCommand.php";
            $lintoCommand = new LintoCommand($bot);
-           $lintoCommand->execute(getenv('ADMIN'));
+           $lintoCommand->setChatId(getenv('ADMIN'))->execute();
            die;
        }
 

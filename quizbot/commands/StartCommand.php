@@ -1,8 +1,9 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
 use Longman\TelegramBot\Request;
+use MongoDB\Driver\Server;
 use Quizbot\QuizBotCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
@@ -41,7 +42,7 @@ class StartCommand extends QuizBotCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute()
+    public function execute(): ServerResponse
     {
         $text    = 'Hi there! ' . PHP_EOL . PHP_EOL .
             '- hit /quiz to start a challenge' . PHP_EOL .

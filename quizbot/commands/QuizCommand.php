@@ -1,9 +1,8 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
 use Longman\TelegramBot\Conversation;
-use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Entities\ServerResponse;
 
@@ -14,9 +13,12 @@ use RockstarsChess\PuzzleRepository;
 
 
 /**
- * Start command
+ * Quiz Command
  *
- * Gets executed when a user first starts using the bot.
+ * Starts or continues the quiz.
+ * Quiz is a series of chess puzzles that affects rating.
+ * Once you solve one puzzle the bot immediately sends the next one
+ * without waiting for the user to issue the command again
  */
 class QuizCommand extends QuizBotCommand
 {
@@ -51,7 +53,7 @@ class QuizCommand extends QuizBotCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute()
+    public function execute(): ServerResponse
     {
         $user_id = $this->getMessage()->getFrom()->getId();
         $chat_id = $this->getMessage()->getChat()->getId();

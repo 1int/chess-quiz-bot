@@ -1,6 +1,6 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace QuizBot\Commands;
 
 use Quizbot\QuizBotCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
@@ -10,6 +10,8 @@ use RockstarsChess\PlayerRepository;
 /**
  * Class TopCommand
  * @package Longman\TelegramBot\Commands\SystemCommands
+ *
+ * Shows top N users, usually N=10
  */
 class TopCommand extends QuizBotCommand
 {
@@ -42,7 +44,7 @@ class TopCommand extends QuizBotCommand
      * @return ServerResponse
      * @throws TelegramException
      */
-    public function execute($chat_id = null)
+    public function execute(): ServerResponse
     {
         $repo = new PlayerRepository();
         $players = $repo->top(self::LIMIT);
@@ -61,6 +63,6 @@ class TopCommand extends QuizBotCommand
             $playersText .= '*' . $player['elo'] . '*' . ' ' . $emo . $firstName . $lastName . $nickname . ' ' . "\n";
         }
 
-        return $this->replyWithMarkdown($header . $playersText, $chat_id);
+        return $this->replyWithMarkdown($header . $playersText);
     }
 }
