@@ -73,7 +73,7 @@ class QuizCommand extends QuizBotCommand
         if($this->quizBot->recursion) {
             if(rand(1, 100) >= 85) {
                 $topCommand = new TopCommand($this->telegram);
-                $topCommand->execute($chat_id);
+                $topCommand->setChatId($chat_id)->execute();
             }
         }
 
