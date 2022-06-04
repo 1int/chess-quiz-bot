@@ -74,7 +74,7 @@ abstract class QuizBotCommand extends UserCommand
         $data = [
             'chat_id' => $chat_id,
             'parse_mode' => 'markdown',
-            'text' => $text
+            'text' => str_replace('_', "\\_", $text)
         ];
 
         return Request::sendMessage($data);

@@ -2,7 +2,7 @@
 
 namespace QuizBot;
 
-use Longman\TelegramBot\Commands\SystemCommands\RandomCommand;
+use QuizBot\Commands\RandomCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\DB;
 use Longman\TelegramBot\Entities\Message;

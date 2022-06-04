@@ -7,7 +7,6 @@ use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Entities\ServerResponse;
 
-use MongoDB\Driver\Server;
 use QuizBot\QuizBot;
 use QuizBot\QuizBotCommand;
 use QuizBot\QuizBotRequest;
