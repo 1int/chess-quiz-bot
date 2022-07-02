@@ -2,3 +2,4 @@
 vendor/
 .env
 TODO.txt
+TestCommand.php

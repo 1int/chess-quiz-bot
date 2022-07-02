@@ -29,11 +29,11 @@ class PuzzleCommand extends QuizBotCommand
     public function execute(): ServerResponse
     {
         if(is_null($this->chat_id)) {
-            $chat_id = $this->getMessage()->getChat()->getId();
+            $this->chat_id = $this->getMessage()->getChat()->getId();
             $isChannel = false;
             if($this->getMessage()->getChat()->isPrivateChat()) {
                 return Request::sendMessage([
-                    'chat_id' => $chat_id,
+                    'chat_id' => $this->chat_id,
                     'text' => "This command is reserved for channels and groups.\nUse /quiz to play alone."
                 ]);
             }
