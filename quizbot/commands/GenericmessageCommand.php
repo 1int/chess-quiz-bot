@@ -66,11 +66,12 @@ class GenericmessageCommand extends QuizBotCommand
             return Request::emptyResponse();
         }
         else {
-            return  Request::sendMessage([
+            //Bot no reply to all messages
+            /*return  Request::sendMessage([
                 'chat_id' => $chat_id,
                 'text' => 'I don\'t really understand human language.' . "\n" . 'Wanna do a /quiz or a /random puzzle?',
                 'reply_markup' => json_encode(['remove_keyboard' => true]),
-            ]);
+            ]);*/
         }
     }
 }
